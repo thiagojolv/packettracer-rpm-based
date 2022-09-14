@@ -7,9 +7,9 @@ Easily install Cisco Packet Tracerin RPM based systems. This installation progra
 ## Tested RPM based systems
 
 - [ ] Alma Linux 8  
-- [ ] Alma Linux 9  
+- [x] Alma Linux 9  
 - [ ] Centos Stream 8  
-- [ ] Centos Stream 9  
+- [x] Centos Stream 9  
 - [x] Fedora 35  
 - [x] Fedora 36  
 - [ ] Fedora 37  
@@ -17,7 +17,7 @@ Easily install Cisco Packet Tracerin RPM based systems. This installation progra
 - [ ] OpenSuse Leap 15.4  
 - [ ] OpenSuse Tumbleweed  
 - [ ] Rocky Linux 8  
-- [ ] Rocky Linux 9  
+- [x] Rocky Linux 9  
 
 ## Install
 
