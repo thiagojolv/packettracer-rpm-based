@@ -28,12 +28,9 @@ DEPS=(
   'qt5-qtsvg.x86_64'          \
   'qt5-qtspeech'              \
 )
+INSTALLER_BASENAME=''
+IS_RHEL_BASED=0
 LOCALIZED_VERSIONS=()
-OPENSUSE=(
-  'SUSE Linux'            \
-  'OpenSUSE Leap'         \
-  'OpenSUSE Tumbleweed'   \
-)
 OS_VERSION=`sed -n '/^NAME/p' /etc/os-release |\
             cut -f2 -d '=' |\
             sed 's/"// g'`
@@ -46,6 +43,11 @@ RHEL_LIKE=(
   'CentOS Linux'              \
   'Rocky Linux'               \
   'Alma Linux'                \
+)
+SUSE=(
+  'SUSE Linux'            \
+  'OpenSUSE Leap'         \
+  'OpenSUSE Tumbleweed'   \
 )
 
 
@@ -83,6 +85,14 @@ install() {
   sudo sed -i 's/packettracer/packettracer --no-sandbox args/' /usr/share/applications/cisco-pt.desktop
   sudo ./packettracer/postinst 
 
+  if [ $IS_RHEL_BASED == 1 ]; then
+    echo "Installing dependencies and configuring SELinux for RHEL based..."
+    sleep 1
+    sudo dnf install -y epel-release
+    sudo ausearch -c 'PacketTracer' --raw|audit2allow -M my-PacketTracer
+    sudo semodule -X 300 -i my-PacketTracer.pp
+  fi
+
   echo "Installing dependecies..."
   sleep 2
   sudo $PACKAGE_MANAGER install -y "${DEPS[@]}"
@@ -93,18 +103,8 @@ install() {
 locate_installers() {
   c=1
   for installer in $(sudo find /home -type f -name 'CiscoPacketTracer*'); do
-    listed_path=($(sed 's/\// /g' <<< $installer))
-    # listed_path run a regex that separe path with spaces
-    # and turn it into a list to be used in cut cmd for get
-    # the version value. Ex:
-    # /home/user/Documents/CiscoPacketTracer_820_Ubuntu_64bit.deb
-    # ( home user Documents CiscoPakcetTracer_820_Ubuntu_64bit.deb )
-    #                      '--------------------------------------'
-    #                                         |
-    #                                         V
-    #                                last position in the list
-    #                      cut -f2 -d "_" <<< ${listed_path[-1]}
-    version=$(cut -f2 -d "_" <<< ${listed_path[-1]})
+    INSTALLER_BASENAME=`basename $installer`
+    version=$(cut -f2 -d "_" <<< $INSTALLER_BASENAME)
     LOCALIZED_VERSIONS[$c]=$version
     LOCALIZED_INSTALLERS[$c]=$installer
     ((c++))
@@ -162,9 +162,14 @@ uninstall() {
 # to be used to install dependencies
 for os in "${RHEL_LIKE[@]}"; do
   if [ "$OS_VERSION" == "$os" ]; then
-    PACKAGE_MANAGER="yum"
+    PACKAGE_MANAGER="dnf"
+
+    if [[ $os == "CentOS Linux" ]] || [[ $os == "Rocky Linux" ]]; then
+      IS_RHEL_BASED=1
+    fi
+
   else
-    for os in "${OPENSUSE}"; do
+    for os in "${SUSE[@]}"; do
       if [ "$OS_VERSION" == "$os" ]; then
         PACKAGE_MANAGER="zypper"
       fi
@@ -195,7 +200,7 @@ while : ; do
         dialog --backtitle "$BACKTITLE on $OS_VERSION" \
         --yesno "Do you want to install the \
         ${LOCALIZED_VERSIONS[$select_version]} \
-        do Cisco Packet Tracer?" \
+        version of Cisco Packet Tracer?" \
         6 60
         
         if [ $? = 0 ]; then
@@ -206,7 +211,6 @@ while : ; do
           --msgbox "Cisco Packet Tracer ${LOCALIZED_VERSIONS[$((select_version))]} was installed." \
           6 40
           break
-
         fi
       ;;
     2 ) dialog --backtitle "$BACKTITLE on $OS_VERSION" \
