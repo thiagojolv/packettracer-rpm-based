@@ -86,11 +86,9 @@ install() {
   sudo ./packettracer/postinst 
 
   if [ $IS_RHEL_BASED == 1 ]; then
-    echo "Installing dependencies and configuring SELinux for RHEL based..."
+    echo "Installing dependencies for RHEL based..."
     sleep 1
-    sudo dnf install -y epel-release
-    sudo ausearch -c 'PacketTracer' --raw|audit2allow -M my-PacketTracer
-    sudo semodule -X 300 -i my-PacketTracer.pp
+    sudo dnf install -y epel-release compat-openssl11
   fi
 
   echo "Installing dependecies..."
