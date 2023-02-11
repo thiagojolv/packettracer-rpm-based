@@ -12,7 +12,7 @@ Easily install Cisco Packet Tracerin RPM based systems. This installation progra
 - [x] Centos Stream 9  
 - [x] Fedora 35  
 - [x] Fedora 36  
-- [ ] Fedora 37  
+- [x] Fedora 37  
 - [ ] Mageia 8  
 - [ ] OpenSuse Leap 15.4  
 - [ ] OpenSuse Tumbleweed  
