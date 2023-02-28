@@ -2,7 +2,7 @@
 
 Easily install Cisco Packet Tracerin RPM based systems. This installation program automatically detects a Cisco Packet Tracer `.deb` in any directory on `/home`.
 
-**This program use [Dialog](https://linux.die.net/man/1/dialog) program to render dialog boxes**
+**This program uses [Dialog](https://linux.die.net/man/1/dialog) program to render dialog boxes**
 
 ## Tested RPM based systems
 
@@ -15,7 +15,7 @@ Easily install Cisco Packet Tracerin RPM based systems. This installation progra
 - [x] Fedora 37  
 - [ ] Mageia 8  
 - [ ] OpenSuse Leap 15.4  
-- [ ] OpenSuse Tumbleweed  
+- [x] OpenSuse Tumbleweed  
 - [ ] Rocky Linux 8  
 - [x] Rocky Linux 9  
 
