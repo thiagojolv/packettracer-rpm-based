@@ -2,6 +2,8 @@
 
 Easily install Cisco Packet Tracerin RPM based systems. This installation program automatically detects a Cisco Packet Tracer `.deb` in any directory on `/home`.
 
+**This program is not completed, but realize the necessary to install Cisco Packet Tracer. Soon I will be inserting features to check system dependencies and other things that can make the program more intelligent.**
+
 **This program uses [Dialog](https://linux.die.net/man/1/dialog) program to render dialog boxes**
 
 ## Tested RPM based systems
